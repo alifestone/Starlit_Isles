@@ -65,3 +65,7 @@ python3 -m http.server 8000
 ## 製作
 
 程式碼由 Claude Opus 5.5 撰寫。使用 [three.js](https://threejs.org/) 0.160 與 Noto Serif TC／Noto Sans TC 字型。
+
+## 授權
+
+[MIT License](LICENSE)
