@@ -2,7 +2,7 @@
 
 [![星嶼 宣傳影片](trailer/poster.jpg)](trailer/starlit-isles-trailer.mp4)
 
-▶ [觀看宣傳影片（80 秒，1080p60）](trailer/starlit-isles-trailer.mp4)
+▶ [觀看宣傳影片（80 秒，1080p60）](https://youtu.be/LiYpIoRra3w)
 
 天空群島沉睡了太久。你是一隻會發光的紙鶴。
 收集散落的星種，把光送回每一座浮島，讓整片天空，迎來第一道黎明。
