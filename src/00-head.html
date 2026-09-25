@@ -1,0 +1,222 @@
+<title>星嶼 Starlit Isles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --night:#05071a;
+  --ink:#eef0ff;
+  --ink-dim:#aab0d8;
+  --gold:#ffd98a;
+  --amber:#ffb347;
+  --aurora:#6ff2d2;
+  --rose:#ff9ec0;
+  --glass:rgba(12,16,44,.46);
+  --glass-line:rgba(255,230,180,.22);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--night);color:var(--ink);font-family:var(--sans);}
+body{-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent;}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none;}
+button{font-family:var(--sans);cursor:pointer;color:var(--ink);}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+/* ---------- loading ---------- */
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--night);z-index:50;transition:opacity 1.2s ease;}
+#loading p{font-family:var(--serif);letter-spacing:.5em;color:var(--ink-dim);font-size:15px;margin:0;}
+#loading.gone{opacity:0;pointer-events:none;}
+
+/* ---------- title screen ---------- */
+#title{position:fixed;inset:0;z-index:20;display:grid;grid-template-columns:1fr auto;align-items:end;
+  padding:max(28px,env(safe-area-inset-top)) clamp(20px,5vw,72px) max(36px,env(safe-area-inset-bottom));
+  background:radial-gradient(120% 90% at 20% 100%,rgba(5,7,26,.78),rgba(5,7,26,0) 62%);transition:opacity 1.4s ease;}
+#title.gone{opacity:0;pointer-events:none;}
+.t-left{max-width:30rem;display:flex;flex-direction:column;gap:18px;padding-bottom:4px;}
+.t-eyebrow{font-size:12px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin:0;}
+.t-lede{font-family:var(--serif);font-weight:500;font-size:clamp(17px,2.1vw,21px);line-height:1.9;margin:0;color:var(--ink);text-wrap:balance;}
+.t-note{font-size:13px;color:var(--ink-dim);margin:0;line-height:1.7;}
+#startBtn{align-self:flex-start;display:inline-flex;align-items:center;gap:14px;padding:15px 30px 15px 26px;border-radius:999px;
+  border:1px solid rgba(255,217,138,.55);background:linear-gradient(180deg,rgba(255,217,138,.22),rgba(255,179,71,.08));
+  font-size:18px;font-weight:700;letter-spacing:.3em;box-shadow:0 0 38px rgba(255,190,90,.28),inset 0 0 18px rgba(255,217,138,.12);
+  transition:transform .25s ease,box-shadow .25s ease;}
+#startBtn:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(255,190,90,.5),inset 0 0 18px rgba(255,217,138,.2);}
+#startBtn svg{width:22px;height:22px;flex:none;}
+.t-right{display:flex;gap:18px;align-items:flex-start;align-self:start;padding-top:2vh;}
+.t-name{writing-mode:vertical-rl;font-family:var(--serif);font-weight:900;font-size:clamp(78px,14vw,168px);line-height:1;margin:0;letter-spacing:.08em;
+  background:linear-gradient(180deg,#fff6df 10%,#ffd98a 55%,#ff9ec0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(255,200,120,.45));}
+.t-sub{writing-mode:vertical-rl;font-family:var(--serif);font-size:clamp(14px,1.5vw,17px);letter-spacing:.55em;color:var(--ink-dim);margin:0;padding-top:.6em;}
+.t-seal{writing-mode:vertical-rl;font-family:var(--serif);font-size:13px;color:#ffe9c4;background:#b8323a;padding:6px 3px;border-radius:3px;letter-spacing:.2em;margin-top:.6em;
+  box-shadow:0 0 18px rgba(184,50,58,.5);}
+
+/* ---------- HUD ---------- */
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity 1.5s ease;}
+#hud.on{opacity:1;}
+.panel{position:absolute;top:max(16px,env(safe-area-inset-top));left:16px;display:flex;flex-direction:column;gap:8px;
+  padding:12px 16px 13px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.p-row{display:flex;align-items:center;gap:10px;font-size:14px;font-variant-numeric:tabular-nums;}
+.p-label{color:var(--ink-dim);letter-spacing:.12em;font-size:12px;min-width:4.6em;}
+.p-val{font-weight:700;color:var(--gold);}
+.isles{display:flex;gap:6px;}
+.isles i{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);display:block;transition:all .6s ease;}
+.isles i.lit{border-color:transparent;box-shadow:0 0 10px currentColor;background:currentColor;}
+#objective{font-family:var(--serif);font-size:15px;color:var(--ink);max-width:17em;line-height:1.5;}
+.btns{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;display:flex;gap:8px;pointer-events:auto;}
+.btns button{width:42px;height:42px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-line);display:grid;place-items:center;padding:0;}
+.btns svg{width:20px;height:20px;}
+#hint{position:absolute;left:50%;bottom:max(34px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:10px 20px;border-radius:999px;
+  background:var(--glass);border:1px solid var(--glass-line);font-size:14px;letter-spacing:.08em;white-space:nowrap;transition:opacity 1s ease;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis;}
+#hint.gone{opacity:0;}
+#marker{position:absolute;left:0;top:0;width:54px;height:54px;margin:-27px 0 0 -27px;display:grid;place-items:center;transition:opacity .4s;}
+#marker svg{width:54px;height:54px;overflow:visible;filter:drop-shadow(0 0 8px rgba(255,210,120,.9));}
+#marker span{position:absolute;top:56px;font-size:12px;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums;text-shadow:0 0 6px #000;}
+#toast{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity 1.2s ease,transform 1.2s ease;width:calc(100vw - 32px);}
+#toast.on{opacity:1;transform:translate(-50%,-60%);}
+#toast h2{font-family:var(--serif);font-weight:900;font-size:clamp(30px,5vw,54px);margin:0 0 6px;letter-spacing:.2em;text-shadow:0 0 30px rgba(255,200,120,.7);text-wrap:balance;}
+#toast p{margin:0;font-size:15px;letter-spacing:.3em;color:var(--gold);}
+#flash{position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(255,240,200,.85),rgba(255,200,140,0) 70%);opacity:0;z-index:9;transition:opacity 1.6s ease;}
+
+/* ---------- touch ---------- */
+#joy{position:fixed;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:1.5px solid rgba(255,255,255,.28);background:rgba(10,14,40,.25);pointer-events:none;z-index:11;display:none;}
+#joy b{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,217,138,.55);box-shadow:0 0 18px rgba(255,217,138,.6);}
+#boostBtn{position:fixed;right:22px;bottom:max(26px,env(safe-area-inset-bottom));width:84px;height:84px;border-radius:50%;z-index:12;display:none;
+  background:radial-gradient(circle,rgba(255,217,138,.4),rgba(255,179,71,.12));border:1.5px solid rgba(255,217,138,.6);font-size:15px;font-weight:700;letter-spacing:.15em;}
+body.touch.playing #boostBtn{display:block;}
+
+/* ---------- ending ---------- */
+#ending{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(80% 70% at 50% 50%,rgba(20,12,40,.55),rgba(5,7,26,.15));
+  opacity:0;pointer-events:none;transition:opacity 2s ease;}
+#ending.on{opacity:1;pointer-events:auto;}
+.e-card{max-width:34rem;text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center;}
+.e-card h2{font-family:var(--serif);font-weight:900;font-size:clamp(34px,6vw,60px);margin:0;letter-spacing:.2em;text-shadow:0 0 40px rgba(255,190,120,.8);}
+.e-stats{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;font-variant-numeric:tabular-nums;}
+.e-stats div{display:flex;flex-direction:column;gap:2px;}
+.e-stats b{font-size:26px;color:var(--gold);font-weight:700;}
+.e-stats span{font-size:12px;letter-spacing:.2em;color:var(--ink-dim);}
+.e-credit{font-family:var(--serif);font-size:15px;line-height:1.95;margin:0;color:var(--ink);text-wrap:balance;}
+.e-credit em{font-style:normal;color:var(--gold);}
+.e-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.e-btns button{padding:12px 24px;border-radius:999px;border:1px solid rgba(255,217,138,.5);background:rgba(255,217,138,.12);font-size:15px;letter-spacing:.2em;}
+.e-btns button.primary{background:rgba(255,217,138,.28);}
+
+/* ---------- achievements ---------- */
+#ending{display:flex;overflow-y:auto;background:radial-gradient(90% 80% at 50% 50%,rgba(14,10,36,.72),rgba(5,7,26,.35));}
+#ending .e-card{margin:auto;max-width:54rem;width:100%;}
+.ach-wrap{width:100%;display:flex;flex-direction:column;gap:10px;}
+.ach-head{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.35em;color:var(--ink-dim);padding:0 2px;}
+#achCount{color:var(--gold);font-weight:700;letter-spacing:.1em;font-size:14px;font-variant-numeric:tabular-nums;}
+.ach{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.a{display:flex;gap:10px;align-items:center;text-align:left;padding:9px 10px;border-radius:10px;background:rgba(12,16,44,.62);border:1px solid rgba(255,255,255,.07);}
+.a .s{flex:none;width:38px;height:38px;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:20px;font-style:normal;
+  border-radius:5px;border:1.5px dashed rgba(255,255,255,.22);color:rgba(255,255,255,.3);}
+.a.on{border-color:rgba(255,217,138,.22);}
+.a.on .s{background:#b8323a;border:none;color:#ffe9c4;box-shadow:0 0 16px rgba(184,50,58,.55);transform:rotate(-4deg);animation:stamp .5s cubic-bezier(.2,1.5,.4,1) both;animation-delay:var(--d,0s);}
+.a b{display:flex;align-items:center;gap:6px;font-size:14px;line-height:1.3;}
+.a:not(.on) b{color:var(--ink-dim);}
+.a span{display:block;font-size:11.5px;color:var(--ink-dim);line-height:1.45;margin-top:2px;}
+.a.past .s{animation:none;opacity:.8;}
+.a .old{font-style:normal;font-size:10px;color:var(--ink-dim);border:1px solid rgba(255,255,255,.28);border-radius:3px;padding:0 4px;letter-spacing:.05em;}
+.a .new{font-style:normal;font-size:10px;color:var(--night);background:var(--gold);border-radius:3px;padding:0 4px;letter-spacing:.05em;}
+@keyframes stamp{from{transform:scale(2.3) rotate(-14deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}
+@media (max-width:760px){.ach{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (prefers-reduced-motion:reduce){.a.on .s{animation:none;}}
+#toast p{white-space:pre-line;line-height:1.9;}
+
+/* ---------- pause ---------- */
+#pause{position:fixed;inset:0;z-index:31;display:grid;place-items:center;padding:24px 16px;background:rgba(5,7,26,.58);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s ease;}
+#pause.on{opacity:1;pointer-events:auto;}
+.pz-card{display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center;max-width:26rem;}
+.pz-card h2{font-family:var(--serif);font-weight:900;font-size:clamp(32px,5vw,46px);letter-spacing:.4em;margin:0 0 0 .4em;text-shadow:0 0 30px rgba(255,200,120,.6);}
+.pz-keys{display:grid;grid-template-columns:auto auto;gap:9px 18px;font-size:14px;margin:0;text-align:left;}
+.pz-keys dt{color:var(--gold);font-weight:700;text-align:right;}
+.pz-keys dd{margin:0;color:var(--ink-dim);}
+body.paused #boostBtn,body.paused #joy{display:none !important;}
+
+@media (max-width:640px){
+  #title{grid-template-columns:1fr;grid-template-rows:1fr auto;}
+  .t-right{justify-self:end;grid-row:1;}
+  .t-left{grid-row:2;}
+  .panel{padding:9px 12px;gap:6px;}
+  #objective{font-size:13px;max-width:13em;}
+  #hint{font-size:12px;white-space:normal;text-align:center;border-radius:14px;}
+}
+@media (prefers-reduced-motion:reduce){
+  #startBtn,#toast,#title,#hud{transition:none;}
+}
+</style>
+
+<canvas id="c" tabindex="0" aria-label="星嶼 3D 遊戲畫面"></canvas>
+<div id="loading"><p>星 光 正 在 聚 集</p></div>
+
+<section id="title" aria-label="開始畫面">
+  <div class="t-left">
+    <p class="t-eyebrow">a paper crane · five sleeping isles</p>
+    <p class="t-lede">天空群島沉睡了太久。<br>你是一隻會發光的紙鶴。<br>收集散落的星種，把光送回每一座浮島，<br>讓整片天空，迎來第一道黎明。</p>
+    <button id="startBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 13 L21 4 L14 20 L11 14 Z"/><path d="M11 14 L21 4"/></svg>啟程</button>
+    <p class="t-note" id="ctrlNote">滑鼠控制方向，按住左鍵或空白鍵加速，按 P 暫停。建議開啟聲音，戴耳機更好。</p>
+  </div>
+  <div class="t-right">
+    <p class="t-sub">紙鶴與沉睡的天空</p>
+    <h1 class="t-name">星嶼</h1>
+    <span class="t-seal">光之旅</span>
+  </div>
+</section>
+
+<div id="hud" aria-live="polite">
+  <div class="panel">
+    <div class="p-row"><span class="p-label">浮島</span><span class="isles" id="isles"></span></div>
+    <div class="p-row"><span class="p-label">星種</span><span class="p-val" id="seedCount">0</span></div>
+    <div id="objective">跟著金色星光飛行</div>
+  </div>
+  <div class="btns">
+    <button id="pauseBtn" type="button" aria-label="暫停"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg></button>
+    <button id="muteBtn" type="button" aria-label="切換聲音"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="muteWave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+    <button id="fsBtn" type="button" aria-label="全螢幕"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+  <div id="marker"><svg viewBox="-27 -27 54 54"><circle r="9" fill="none" stroke="#ffd98a" stroke-width="2"/><path id="markerArrow" d="M0 -24 L7 -14 L-7 -14 Z" fill="#ffd98a"/></svg><span id="markerDist"></span></div>
+  <div id="toast"><h2 id="toastH"></h2><p id="toastP"></p></div>
+  <div id="hint">移動滑鼠控制方向 · 按住左鍵或空白鍵加速 · P 暫停</div>
+</div>
+<div id="flash"></div>
+<div id="joy"><b></b></div>
+<button id="boostBtn" type="button">加速</button>
+
+<section id="ending" aria-label="結局">
+  <div class="e-card">
+    <h2>天空醒了</h2>
+    <div class="e-stats">
+      <div><b id="stTime">0:00</b><span>飛行時間</span></div>
+      <div><b id="stSeeds">0</b><span>星種</span></div>
+      <div><b id="stRings">0</b><span>光環</span></div>
+      <div><b id="stAch">0</b><span>累計成就</span></div>
+    </div>
+    <div class="ach-wrap">
+      <div class="ach-head"><span>成就</span><span id="achCount"></span></div>
+      <div class="ach" id="achGrid"></div>
+    </div>
+    <p class="e-credit">這個世界裡的每一座島、每一棵樹、每一隻天鯨、每一個音符，<br>都沒有使用任何圖片、模型或音檔。<br>它們全部由 <em>Claude Opus 5.5</em> 寫下的程式碼，在你的瀏覽器裡即時誕生。</p>
+    <div class="e-btns">
+      <button id="freeBtn" class="primary" type="button">繼續自由飛翔</button>
+      <button id="againBtn" type="button">再玩一次</button>
+    </div>
+  </div>
+</section>
+
+<section id="pause" aria-label="暫停選單">
+  <div class="pz-card">
+    <h2>暫停</h2>
+    <dl class="pz-keys" id="pzKeys">
+      <dt>滑鼠</dt><dd>控制方向</dd>
+      <dt>左鍵 / 空白鍵</dt><dd>加速</dd>
+      <dt>P / Esc</dt><dd>暫停或繼續</dd>
+      <dt>M</dt><dd>開關聲音</dd>
+    </dl>
+    <div class="e-btns">
+      <button id="resumeBtn" class="primary" type="button">繼續飛行</button>
+      <button id="restartBtn" type="button">重新開始</button>
+    </div>
+  </div>
+</section>

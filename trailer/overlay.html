@@ -1,0 +1,64 @@
+
+<style>
+/* the game's own UI stays out of the trailer; the director draws its own captions */
+#loading,#title,#hud,#ending,#pause,#joy,#boostBtn,#flash{display:none !important;}
+#tr{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden;}
+#trVig{position:absolute;inset:0;background:radial-gradient(130% 100% at 50% 48%,rgba(0,0,0,0) 58%,rgba(2,3,14,.5) 100%);}
+#trFlash{position:absolute;inset:0;opacity:0;background:radial-gradient(75% 75% at 50% 50%,rgba(255,244,214,.95),rgba(255,206,150,.35) 55%,rgba(255,190,130,0) 85%);}
+#trCap{position:absolute;left:0;right:0;bottom:11.5%;text-align:center;font-family:var(--serif);font-weight:500;font-size:46px;letter-spacing:.3em;
+  padding-left:.3em;color:#f6f2ff;white-space:nowrap;text-shadow:0 0 28px rgba(255,196,120,.55),0 2px 14px rgba(0,0,0,.65);}
+#trCap span,#trSub span{display:inline-block;will-change:opacity,transform,filter;}
+#trSub{position:absolute;left:0;right:0;bottom:11.5%;text-align:center;font-family:var(--sans);font-weight:500;font-size:26px;letter-spacing:.22em;
+  padding-left:.22em;color:var(--gold);white-space:nowrap;text-shadow:0 0 18px rgba(255,190,110,.5),0 2px 10px rgba(0,0,0,.7);}
+#trBlack{position:absolute;inset:0;background:#02030c;opacity:1;}
+
+/* ---------- end card: the title screen's calligraphy, re-staged ---------- */
+#trEnd{position:absolute;inset:0;opacity:0;}
+#trEnd .shade{position:absolute;inset:0;background:
+  radial-gradient(38% 62% at 82% 36%,rgba(14,12,44,.5),rgba(14,12,44,0) 100%),
+  linear-gradient(90deg,rgba(10,10,36,.62) 0%,rgba(10,10,36,.34) 34%,rgba(10,10,36,0) 56%),
+  linear-gradient(0deg,rgba(10,10,36,.5) 0%,rgba(10,10,36,0) 48%);}
+#trEnd .right{position:absolute;top:92px;right:150px;display:flex;gap:26px;align-items:flex-start;}
+#trEnd .name{writing-mode:vertical-rl;font-family:var(--serif);font-weight:900;font-size:236px;line-height:1;margin:0;letter-spacing:.06em;
+  filter:drop-shadow(0 0 34px rgba(255,200,120,.5));}
+#trEnd .name span{display:inline-block;background:linear-gradient(180deg,#fff6df 10%,#ffd98a 55%,#ff9ec0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+#trEnd .sub{writing-mode:vertical-rl;font-family:var(--serif);font-size:25px;letter-spacing:.55em;color:#d9dcff;margin:0;padding-top:.8em;text-shadow:0 2px 10px rgba(0,0,0,.6);}
+#trEnd .seal{writing-mode:vertical-rl;font-family:var(--serif);font-size:21px;color:#ffe9c4;background:#b8323a;padding:10px 6px;border-radius:4px;letter-spacing:.2em;margin-top:.9em;
+  box-shadow:0 0 26px rgba(184,50,58,.6);transform-origin:50% 50%;}
+#trEnd .left{position:absolute;left:120px;bottom:104px;max-width:760px;display:flex;flex-direction:column;gap:22px;}
+#trEnd .eyebrow{font-family:var(--sans);font-size:17px;font-weight:700;letter-spacing:.5em;color:#ffe2a0;margin:0;text-shadow:0 0 16px rgba(255,190,100,.55),0 2px 8px rgba(0,0,0,.5);}
+#trEnd .lede{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.75;margin:0;color:#f6f2ff;text-shadow:0 2px 14px rgba(0,0,0,.6);}
+#trEnd .note{font-family:var(--sans);font-size:19px;line-height:1.85;margin:0;color:#dfe1fa;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 12px rgba(0,0,0,.6);}
+#trEnd .note em{font-style:normal;color:var(--gold);}
+#trEnd .cta{display:flex;align-items:center;gap:22px;margin-top:6px;}
+#trEnd .btn{display:inline-flex;align-items:center;gap:16px;padding:17px 36px 17px 30px;border-radius:999px;border:1px solid rgba(255,217,138,.6);
+  background:linear-gradient(180deg,rgba(255,217,138,.26),rgba(255,179,71,.1));font-family:var(--sans);font-size:23px;font-weight:700;letter-spacing:.3em;color:#fff4de;
+  box-shadow:0 0 44px rgba(255,190,90,.35),inset 0 0 18px rgba(255,217,138,.14);}
+#trEnd .btn svg{width:26px;height:26px;}
+#trEnd .cta span{font-family:var(--sans);font-size:18px;letter-spacing:.14em;color:#dfe1fa;text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 10px rgba(0,0,0,.5);}
+.tr-fade{will-change:opacity,transform,filter;}
+</style>
+<div id="tr">
+  <div id="trVig"></div>
+  <div id="trFlash"></div>
+  <div id="trCap"></div>
+  <div id="trSub"></div>
+  <div id="trEnd">
+    <div class="shade"></div>
+    <div class="right">
+      <p class="sub tr-fade" id="eSub">紙鶴與沉睡的天空</p>
+      <h1 class="name"><span class="tr-fade" id="eN1">星</span><span class="tr-fade" id="eN2">嶼</span></h1>
+      <span class="seal" id="eSeal">光之旅</span>
+    </div>
+    <div class="left">
+      <p class="eyebrow tr-fade" id="eEye">STARLIT ISLES</p>
+      <p class="lede tr-fade" id="eLede">一隻紙鶴，五座沉睡的浮島，<br>一場由你點亮的黎明。</p>
+      <p class="note tr-fade" id="eNote">每一座島、每一棵樹、每一隻天鯨、每一個音符，都沒有使用任何圖片、模型或音檔，<br>全部由 <em>Claude Opus 5.5</em> 寫下的程式碼，在瀏覽器裡即時誕生。</p>
+      <div class="cta tr-fade" id="eCta">
+        <div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 13 L21 4 L14 20 L11 14 Z"/><path d="M11 14 L21 4"/></svg>啟程</div>
+        <span>打開瀏覽器就能玩 · 支援滑鼠與觸控</span>
+      </div>
+    </div>
+  </div>
+  <div id="trBlack"></div>
+</div>
